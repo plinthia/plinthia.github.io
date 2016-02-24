@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<h1>Let's roll a die</h1>
+<body>
+<style>
+body {
+	background-color:#b3f0ff;
+	text-align:center;
+}
+h1{
+	font-family: "helvetica";
+	color:#ff33cc;
+}
+p{
+	font-family: "helvetica";
+	color:#ff33cc;
+}
+</style>
+<button onclick="roll(6)">6 sided die</button>
+<br>
+<img src="6die.png" height="42" onclick="roll(6)">
+<img src="d12.jpg" height="42" onclick="roll(12)">
+<img src="d20.jpg" height="42" onclick="roll(20)">
+<p id="demo"></p>
+
+<p>Choose your own number</p>
+<input type="number" id="numberSides" size="10">
+<br>
+<button onclick="rollSides()">Roll</button>
+
+<p id="sides"></p>
+
+<button onclick="viewNumber()">test</button>
+
+<p id="test"></p>
+
+
+<script type="text/javascript">
+
+function roll(x){
+	var a = Math.ceil(Math.random()*x)
+	if(a===20){
+		document.getElementById("demo").innerHTML = "Holy fuck you rolled a natural " + a +"!";
+	}else if(a===1){
+		document.getElementById("demo").innerHTML = "Too bad you rolled a " + a +"!";
+	}else{
+	document.getElementById("demo").innerHTML = "You rolled a " + a +"!";
+}
+
+}
+function rollSides(x){
+	var x = document.getElementById("numberSides").value;
+	var a = Math.ceil(Math.random()*x);
+	if(a==x){
+		document.getElementById("sides").innerHTML = "Holy fuck you rolled a natural " + a +"!";
+	}else if(a===1){
+		document.getElementById("sides").innerHTML = "Too bad you rolled a " + a +"!";
+	}else{
+	document.getElementById("sides").innerHTML = "You rolled a " + a +"!";}
+}
+
+function viewNumber(x){
+	var x = document.getElementById("dice[]").value;
+	document.getElementById("test").innerHTML = x;
+}
+
+</script>
+</body>
+</html>

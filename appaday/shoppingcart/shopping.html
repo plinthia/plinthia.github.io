@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<header>
+</header>
+
+<h1>Let's go shopping!</h1>
+<body>
+<style>
+body {
+	background-color:#ffffb3;
+	text-align:center;
+}
+h1{
+	font-family: "helvetica";
+	color:#0099ff;
+}
+p{
+	font-family: "helvetica";
+	color:#0099ff;
+}
+</style>	
+<p>
+<input type="text" id="item1" placeholder="Item Name">
+<input type="number" id="price1" step="0.01" placeholder="0.00">
+<input type="number" id="quantity1" placeholder="quantity">
+</p>
+
+<p> Add your own inventory </p>
+<button onclick="addBox()">Add item</button>
+<button onclick="removeBox()">Remove last item</button>
+<div id="fooBar"></div>
+
+<button onclick="newTotal()">Charge it!</button>
+<p id="newTotal"></p>
+<p id="grandTotal"></p>
+</body>
+
+<script type="text/javascript">
+var i=1
+function addBox(){
+	i++;
+	var place = document.getElementById("fooBar");
+	var br = document.createElement("br");
+	br.id="br"+i;
+	var inputItem=document.createElement("input");
+	inputItem.type="text";
+	inputItem.id="item"+i;
+	inputItem.placeholder="Item Name";
+	var inputPrice=document.createElement("input");
+	inputPrice.type="number";
+	inputPrice.id="price"+i;
+	inputPrice.step="0.01";
+	inputPrice.placeholder="0.00";
+	var inputQuantity=document.createElement("input");
+	inputQuantity.type="number";
+	inputQuantity.id="quantity"+i;
+	inputQuantity.placeholder="quantity";
+	place.appendChild(inputItem);
+	place.appendChild(inputPrice);
+	place.appendChild(inputQuantity);
+	place.appendChild(br);
+
+}
+function removeBox(){
+	var place=document.getElementById("fooBar");
+	place.removeChild(document.getElementById("item"+i));
+	place.removeChild(document.getElementById("price" +i));
+	place.removeChild(document.getElementById("quantity" + i));
+    place.removeChild(document.getElementById("br"+i));
+	i--;
+	
+
+}
+function newTotal(){
+	var j=1;
+	var text="";
+	var grandTotalArray=[]
+	
+	while(j<=i){	
+		var x = document.getElementById("item"+j).value;
+		var y = document.getElementById("price"+j).value;
+		var z = document.getElementById("quantity"+j).value;
+		var total = y*z
+		grandTotalArray.push(total);
+		text+="<br>You bought " + z + " " + x +" at $" + y + " for a total of $" + total;
+		j++
+	}
+	var sum = grandTotalArray.reduce(function(a,b){
+		return a + b;
+	})
+	var grandTotalText="You spent a total of $" + sum.toFixed(2);
+	document.getElementById("newTotal").innerHTML=text;
+	document.getElementById("grandTotal").innerHTML=grandTotalText;
+}
+
+</script>
+
+
+</html>

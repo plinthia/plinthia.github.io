@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+	background-color:#ffd9b3;
+	text-align:center;
+}
+h1{
+	font-family: "helvetica";
+	color:#00b300;
+}
+p{
+	font-family: "helvetica";
+	color:#00b300;
+}
+button{
+	font-family: "helvetica";
+	color:#00b300;
+	border: 2px solid #00b300;
+	border-radius: 4px;
+	text-align: center;
+	padding: 15px 32px;
+	font-size: 16px;
+}
+</style>
+<body>
+<h1> Let's make a deal!</h1>
+<p>Just like the gameshow, one of these doors has a prize behind it. Make your choice!</p>
+<br>
+<p id="test"></p>
+<img src="door.jpg" height=200 id="door1" onclick="doorPick(1)">
+<img src="door.jpg" height=200 id="door2" onclick="doorPick(2)">
+<img src="door.jpg" height=200 id="door3" onclick="doorPick(3)">
+<br>
+<p id="message"></p>
+<br>
+<p id="buttons"></p>
+<p id="lastButton"></p>
+<p id="finalMessage"></p>
+<p id="youtube"></p>
+
+<script type="text/javascript">
+function doorPick(x){
+	//Remove onclick so you can only chose the door once
+	var i=1;
+	while(i<=3){
+	document.getElementById("door"+i).removeAttribute("onclick");
+	i++;
+	}
+	var doorID="door" + x;
+	var winnerNumber = Math.ceil(Math.random()*3)
+	switch(x){
+		case 1:
+		if(winnerNumber===1){
+			var open = Math.ceil(Math.random()*2+1);
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+
+		}else if (winnerNumber===2){
+			var open = 3;
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+		}else{
+			var open=2;
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+		}
+		case 2:
+		if(winnerNumber===2){
+			//fix THIS!!! need to random chose between 1 and 3
+			var number = Math.ceil(Math.random()*2);
+			if(number===1){
+				var open = 1;
+			}else{
+				var open = 3;
+			}
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+
+		}else if (winnerNumber===1){
+			var open = 3;
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+		}else{
+			var open=1;
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+		}
+		case 3:
+		if(winnerNumber===3){
+			var open = Math.ceil(Math.random()*2);
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+
+		}else if (winnerNumber===1){
+			var open = 2;
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+		}else{
+			var open=1;
+			document.getElementById("door"+open).setAttribute("src","wrongdoor.jpg");
+			break;
+		}
+	}
+
+
+	document.getElementById("message").innerHTML="You selected door number " + x + " let me open one of the losing doors. Do you want to keep your selection? Or switch to the remaining door?";
+	
+
+	var winner="https://www.youtube.com/embed/FiARsQSlzDc?autoplay=1";
+	var winner2="https://www.youtube.com/embed/i7gIpuIVE3k?autoplay=1";
+	//var winner="winner"+Math.ceil(Math.random()*2);
+	var loser="https://www.youtube.com/embed/1PNKz48oc2g?autoplay=1";
+	var finalButton = document.createElement("button");
+	finalButton.innerHTML="Play Again?"
+	finalButton.onclick=function(){
+		location.reload();
+	}
+	var button1 = document.createElement("button");
+	button1.id="button1";
+	button1.innerHTML="keep choice";
+	button1.onclick=function(){
+		//remove choice buttons
+		j=1;
+		while(j<=2){
+		document.getElementById("buttons").removeChild(document.getElementById("button"+j));
+		j++
+		}
+		//create video iframe
+		var video = document.createElement("iframe");
+		video.width="420";
+		video.height="315";
+		k=Math.ceil(Math.random()*2);
+		if(x===winnerNumber){
+			document.getElementById("finalMessage").innerHTML="Congratulations! Enjoy your prize!"
+			video.src=winner;
+		}else{
+			document.getElementById("finalMessage").innerHTML="Sorry, you chose wrong!"
+			video.src=loser;
+		}
+		document.getElementById("youtube").appendChild(video)
+		//make play again button
+		document.getElementById("lastButton").appendChild(finalButton);
+	};
+
+	var button2 = document.createElement("button");
+	button2.id="button2";
+	button2.innerHTML="change choice"
+	button2.onclick=function(){
+		//remove choice buttons
+		j=1;
+		while(j<=2){
+		document.getElementById("buttons").removeChild(document.getElementById("button"+j));
+		j++
+		}
+		//create video iframe
+		var video = document.createElement("iframe");
+		video.width="420";
+		video.height="315";
+		if(x===winnerNumber){
+			document.getElementById("finalMessage").innerHTML="Sorry, you chose wrong!"
+			video.src=loser;
+		}else{
+			document.getElementById("finalMessage").innerHTML="Congratulations! Enjoy your prize!"
+			video.src=winner;
+		}
+		document.getElementById("youtube").appendChild(video);
+		//make play again button
+		document.getElementById("lastButton").appendChild(finalButton);
+		
+		}
+	document.getElementById("buttons").appendChild(button1);
+	document.getElementById("buttons").appendChild(button2);
+
+
+
+
+
+	//document.getElementById("test").innerHTML=winnerNumber;
+
+}
+</script>
+
+</body>
+</html>

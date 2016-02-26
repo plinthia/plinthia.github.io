@@ -1,0 +1,76 @@
+<DOCTYPE! html>
+<html>
+<style>
+body {
+	background-color:#cc99ff;
+	text-align:center;
+}
+h1{
+	font-family: "helvetica";
+	color:#0000ff;
+}
+p{
+	font-family: "helvetica";
+	color:#0000ff;
+}
+</style>	
+<body>
+<h1>Resize your browser!</h1>
+<p id='jsHeight'></p>
+<!--<button onclick="drawSomething()">test</button>-->
+<div id='canvasSpot'></div>
+
+<script type="text/javascript">
+
+function jsUpdateSize(){
+    var width = window.innerWidth ||
+                document.documentElement.clientWidth ||
+                document.body.clientWidth;
+    var height = window.innerHeight ||
+                 document.documentElement.clientHeight ||
+                 document.body.clientHeight;
+    //make these variables global
+    window.width=width;
+    window.height=height;
+
+    //document.getElementById('jsWidth').innerHTML = width;  // Display the width
+    //document.getElementById('jsHeight').innerHTML = height;// Display the height
+    //document.getElementById('canvasSpot').removeChild(canvas);
+   	var canvas = document.createElement('canvas');
+    canvas.width=width;
+    canvas.height=height-100;
+    canvas.id="drawHere";
+    document.getElementById('canvasSpot').appendChild(canvas);
+    drawSomething();
+};
+function drawSomething(){
+    var c=document.getElementById("drawHere");
+	var ctx=c.getContext("2d");
+	ctx.clearRect(0,0,width,height);
+	var rectWidth=((width-25)/4)-25;
+	var rectHeight=(((height-100)-25)/4)-25;
+	var j=0;
+	while(j<4){
+		var i=0;
+		while(i<4){
+		ctx.fillStyle="#0099ff";
+		ctx.fillRect(25+rectWidth*i+25*i,25+rectHeight*j+25*j,rectWidth,rectHeight);
+		i++
+	}
+	j++
+	}
+	
+	//document.getElementById('jsWidth').innerHTML=rectWidth;
+}
+function magic(){
+	document.getElementById("jsHeight").innerHTML="Wow, its Magic!";
+}
+window.onload = jsUpdateSize;       // When the page first loads
+window.onresize = function(){
+	jsUpdateSize();     // When the browser changes size
+	magic();
+}
+</script>
+
+</body>
+</html>

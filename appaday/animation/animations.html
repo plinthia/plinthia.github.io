@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+	background-color:#f6d5e6;
+	text-align:center;
+}
+h1{
+	font-family: "helvetica";
+	color:#0039e6;
+}
+p{
+	font-family: "helvetica";
+	color:#0039e6;
+}
+button{
+	font-family: "helvetica";
+	color:#0039e6;
+	border: 2px solid #0039e6;
+	border-radius: 4px;
+	text-align: center;
+	padding: 10px 20px;
+	font-size: 16px;
+}
+</style>
+<body>
+<h1>Let's make some cartoons</h1>
+
+<button onclick="animatedStar()">Rotating star </button>
+<button onclick="circle()">Pulsing circle</button>
+<button onclick="person()">Person waving</button>
+<button onclick="clearAnim()">Clear Animation</button>
+<br>
+<canvas id="myCanvas" width="500" height="250" style="border:1px solid black">Your browser does not support HTML5 canvas</canvas>
+
+<script type="text/javascript">
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+
+var angle=0
+function circle(){
+	ctx.clearRect(0,0,500,250);
+	var radius=25+50*Math.abs(Math.cos(angle));
+	ctx.beginPath();
+	ctx.arc(250,125,radius,0,Math.PI*2);
+	ctx.fillStyle="purple";
+	ctx.fill();
+	ctx.stroke();
+	angle += Math.PI/64;
+	window.requestAnimationFrame(circle);
+}
+
+var j=0;
+function animatedStar(){
+	ctx.clearRect(0,0,500,250);
+	ctx.save();
+	ctx.translate(250,125);
+	ctx.rotate(-5*j);
+	star(0,0,5,100,40);
+	ctx.restore();
+	j++;
+	window.requestAnimationFrame(animatedStar);
+}
+function star(cx,cy,spikes,outerRadius,innerRadius){
+	var rot=Math.PI/2*3;
+      var x=cx;
+      var y=cy;
+      var step=Math.PI/spikes;
+
+      ctx.strokeSyle="#000";
+      ctx.beginPath();
+      ctx.moveTo(cx,cy-outerRadius)
+      for(i=0;i<spikes;i++){
+        x=cx+Math.cos(rot)*outerRadius;
+        y=cy+Math.sin(rot)*outerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+
+        x=cx+Math.cos(rot)*innerRadius;
+        y=cy+Math.sin(rot)*innerRadius;
+        ctx.lineTo(x,y)
+        rot+=step
+      }
+      ctx.lineTo(cx,cy-outerRadius)
+      ctx.fillStyle="yellow";
+      ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
+
+}
+var k=0
+function person(){
+	x=(Math.cos(k*Math.PI/64));
+	ctx.clearRect(0,0,500,250);
+	ctx.beginPath();
+	ctx.arc(250,50,25,0,2*Math.PI);
+	//body
+	ctx.moveTo(250,75);
+	ctx.lineTo(250,150);
+	//legs
+	ctx.lineTo(275,225);
+	ctx.moveTo(250,150);
+	ctx.lineTo(225,225);
+	//arms
+	ctx.moveTo(250,90);
+	ctx.lineTo(300,90+15*x);
+	ctx.moveTo(250,90);
+	ctx.lineTo(200,90+15*x);
+	ctx.stroke();
+	k++;
+	window.requestAnimationFrame(person);
+}
+
+function clearAnim(){
+	ctx.clearRect(0,0,500,250);
+	window.requestAnimationFrame(clearAnim);
+}
+</script>
+
+</body>
+</html>

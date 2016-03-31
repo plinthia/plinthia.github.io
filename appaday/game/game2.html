@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<head>
+<title> Mouse Game</title>
+<style>
+canvas {background: #eee; display: block; margin:0 auto;}
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="350"></canvas>
+<div id="test"></div>
+
+<script>
+var canvas=document.getElementById("myCanvas");
+ctx=canvas.getContext("2d");
+var characterX=0;
+var characterY=0;
+var characterHeight=50;
+var characterWidth=50;
+var cheeseHeight=50;
+var cheeseWidth=50;
+var boardHeight=50;
+var boardWidth=50;
+var lev=0;
+
+
+var board={
+	"levels":[{
+			"level":1,
+			"boardX":[100,50,450],
+			"boardY":[0,300,300],
+			"cheeseX":450,
+			"cheeseY":100
+		},
+		{
+			"level":2,
+			"boardX":[50,200],
+			"boardY":[300,200],
+			"cheeseX":450,
+			"cheeseY":200
+		},
+		{
+			"level":3,
+			"boardX":[100,100],
+			"boardY":[100,450],
+			"cheeseX":300,
+			"cheeseY":0
+		}]
+}
+
+//var boardX=[50, 50, 450];
+//var boardY=[0, 300, 300];
+
+document.addEventListener("keydown",keyDownHandler,false);
+//document.addEventListener("keyup",keyUpHandler,false);
+
+function keyDownHandler(e){
+	if(e.keyCode==39){
+		rightPressed=true;
+	}else if(e.keyCode==37){
+		leftPressed=true;
+	}else if(e.keyCode==38){
+		upPressed=true;
+	}else if(e.keyCode==40){
+		downPressed=true;
+	}
+}
+
+
+function drawCharacter(){
+	ctx.beginPath();
+	ctx.rect(characterX,characterY,characterWidth,characterHeight);
+	ctx.fillStyle="red";
+	ctx.fill();
+	ctx.closePath();
+}
+
+
+function drawBoard(){
+	for(i=0; i<board.levels[lev].boardX.length; i++){
+		ctx.beginPath();
+		ctx.rect(board.levels[lev].boardX[i], board.levels[lev].boardY[i], boardWidth, boardHeight);
+		ctx.fillStyle="black";
+		ctx.fill();
+		ctx.closePath();
+	}
+}
+
+function drawCheese(){
+	ctx.beginPath();
+	ctx.rect(board.levels[lev].cheeseX,board.levels[lev].cheeseY,cheeseWidth,cheeseHeight);
+	ctx.fillStyle="yellow";
+	ctx.fill();
+	ctx.closePath();
+}
+
+function cheeseDetector(){
+	if(characterX==board.levels[lev].cheeseX && characterY==board.levels[lev].cheeseY){
+		alert("Congrats, next level.");
+		//document.location.reload();
+		lev++;
+		characterX=0;
+		characterY=0;
+	}
+}
+
+function boardDetector(){
+	for(j=0; j<board.levels[lev].boardX.length; j++){
+		if(characterX + characterWidth >= board.levels[lev].boardX[j] && characterX<=board.levels[lev].boardX[j] + boardWidth && characterY +characterHeight >= board.levels[lev].boardY[j] && characterY<= board.levels[lev].boardY[j] + boardHeight){
+			rightPressed=false;
+			leftPressed=false;
+			upPressed=false;
+			downPressed=false;
+			document.getElementById("test").innerHTML="hit";
+
+		}else{
+			document.getElementById("test").innerHTML="miss";
+		}
+	}
+	document.addEventListener("keydown",keyDownHandler);
+
+}
+
+
+
+function endDetector(){
+	if(lev==board.levels.length){
+		alert("You are out of levels./nPress OK to start again.");
+		document.location.reload();
+	}
+}
+
+function draw(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	endDetector();
+	drawCharacter();
+	drawCheese();
+	drawBoard();
+	cheeseDetector();
+	if(rightPressed){
+		document.removeEventListener("keydown",keyDownHandler);
+		if(characterX>=canvas.width-characterWidth){
+				rightPressed=false;
+				document.addEventListener("keydown",keyDownHandler);
+			}
+		else if(characterX<canvas.width-characterWidth){
+			characterX+=5;
+			}
+	}
+	else if(leftPressed){
+		document.removeEventListener("keydown",keyDownHandler);
+		if(characterX<=0){
+			leftPressed=false;
+			document.addEventListener("keydown",keyDownHandler);
+		}
+		else if(characterX>0){ 
+		characterX-=5;
+		}
+	}
+	else if(downPressed){
+		document.removeEventListener("keydown",keyDownHandler);
+		if(characterY>=canvas.height-characterHeight){
+				downPressed=false;
+				document.addEventListener("keydown",keyDownHandler);
+			}
+		else if(characterY<canvas.height-characterHeight){
+			characterY+=5;
+			}
+	}
+	else if(upPressed){
+		document.removeEventListener("keydown",keyDownHandler);
+		if(characterY<=0){
+			upPressed=false;
+			document.addEventListener("keydown",keyDownHandler);
+		}
+		else if(characterY>0){ 
+		characterY-=5;
+	}
+	}
+	boardDetector();
+
+}
+
+setInterval(draw,10);
+</script>
+</body>

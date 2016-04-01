@@ -21,6 +21,10 @@ var cheeseWidth=50;
 var boardHeight=50;
 var boardWidth=50;
 var lev=0;
+var rightPressed=false;
+var leftPressed=false;
+var downPressed=false;
+var upPressed=false;
 
 
 var board={
@@ -105,37 +109,38 @@ function cheeseDetector(){
 
 function boardDetector(){
 	for(j=0; j<board.levels[lev].boardX.length; j++){
-		if(characterX + characterWidth >= board.levels[lev].boardX[j] && characterX<=board.levels[lev].boardX[j] + boardWidth && characterY +characterHeight >= board.levels[lev].boardY[j] && characterY<= board.levels[lev].boardY[j] + boardHeight){
-			rightPressed=false;
-			leftPressed=false;
-			upPressed=false;
-			downPressed=false;
-			document.getElementById("test").innerHTML="hit";
+		if(rightPressed || leftPressed){
+		
+				if(characterX + characterWidth >= board.levels[lev].boardX[j] && characterX<=board.levels[lev].boardX[j] + boardWidth && characterY +characterHeight > board.levels[lev].boardY[j] && characterY< board.levels[lev].boardY[j] + boardHeight){
+					rightPressed=false;
+					leftPressed=false;
+					upPressed=false;
+					downPressed=false;
+					document.getElementById("test").innerHTML="hit";
+		
+				}else{
+					document.getElementById("test").innerHTML="miss";
+				}
+			}
+			else if(downPressed || upPressed){
+			if(characterX + characterWidth > board.levels[lev].boardX[j] && characterX<board.levels[lev].boardX[j] + boardWidth && characterY +characterHeight >= board.levels[lev].boardY[j] && characterY<= board.levels[lev].boardY[j] + boardHeight){
+					rightPressed=false;
+					leftPressed=false;
+					upPressed=false;
+					downPressed=false;
+					document.getElementById("test").innerHTML="hit";
+		
+				}else{
+					document.getElementById("test").innerHTML="miss";
+				}	
+			}
 
-		}else{
-			document.getElementById("test").innerHTML="miss";
-		}
 	}
 	document.addEventListener("keydown",keyDownHandler);
-
+	
 }
 
-
-
-function endDetector(){
-	if(lev==board.levels.length){
-		alert("You are out of levels./nPress OK to start again.");
-		document.location.reload();
-	}
-}
-
-function draw(){
-	ctx.clearRect(0,0,canvas.width,canvas.height);
-	endDetector();
-	drawCharacter();
-	drawCheese();
-	drawBoard();
-	cheeseDetector();
+function wallDetector(){
 	if(rightPressed){
 		document.removeEventListener("keydown",keyDownHandler);
 		if(characterX>=canvas.width-characterWidth){
@@ -176,6 +181,23 @@ function draw(){
 		characterY-=5;
 	}
 	}
+}
+
+function endDetector(){
+	if(lev==board.levels.length){
+		alert("You are out of levels./nPress OK to start again.");
+		document.location.reload();
+	}
+}
+
+function draw(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	endDetector();
+	drawCharacter();
+	drawCheese();
+	drawBoard();
+	cheeseDetector();
+	wallDetector();
 	boardDetector();
 
 }

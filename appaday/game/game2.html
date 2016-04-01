@@ -126,9 +126,7 @@ function boardDetector(){
 		}
 		var newX = characterX + xMove;
 		var newY = characterY + yMove;
-		if(rightPressed || leftPressed){
-		
-				if(newX + characterWidth >= board.levels[lev].boardX[j] && newX<=board.levels[lev].boardX[j] + boardWidth && newY +characterHeight > board.levels[lev].boardY[j] && newY< board.levels[lev].boardY[j] + boardHeight){
+		if(newX + characterWidth > board.levels[lev].boardX[j] && newX<board.levels[lev].boardX[j] + boardWidth && newY +characterHeight > board.levels[lev].boardY[j] && newY< board.levels[lev].boardY[j] + boardHeight){
 					rightPressed=false;
 					leftPressed=false;
 					upPressed=false;
@@ -138,19 +136,7 @@ function boardDetector(){
 				}else{
 					document.getElementById("test").innerHTML="miss";
 				}
-			}
-			else if(downPressed || upPressed){
-			if(newX + characterWidth > board.levels[lev].boardX[j] && newX<board.levels[lev].boardX[j] + boardWidth && newY +characterHeight >= board.levels[lev].boardY[j] && newY<= board.levels[lev].boardY[j] + boardHeight){
-					rightPressed=false;
-					leftPressed=false;
-					upPressed=false;
-					downPressed=false;
-					document.getElementById("test").innerHTML="hit";
-		
-				}else{
-					document.getElementById("test").innerHTML="miss";
-				}	
-			}
+			
 
 	}
 	

@@ -54,20 +54,19 @@ var board={
 //var boardX=[50, 50, 450];
 //var boardY=[0, 300, 300];
 
-document.addEventListener("keypress",keyDownHandler,false);
+document.addEventListener("keydown",keyDownHandler,false);
 //document.addEventListener("keyup",keyUpHandler,false);
 
 function keyDownHandler(e){
-	if(! rightPressed || leftPressed || downPressed || upPressed){
-		if(e.keyCode==39){
-			rightPressed=true;
-		}else if(e.keyCode==37){
-			leftPressed=true;
-		}else if(e.keyCode==38){
-			upPressed=true;
-		}else if(e.keyCode==40){
-			downPressed=true;
-		}}
+	if(e.keyCode==39){
+		rightPressed=true;
+	}else if(e.keyCode==37){
+		leftPressed=true;
+	}else if(e.keyCode==38){
+		upPressed=true;
+	}else if(e.keyCode==40){
+		downPressed=true;
+	}
 }
 
 
@@ -137,46 +136,46 @@ function boardDetector(){
 			}
 
 	}
-	document.addEventListener("keypress",keyDownHandler);
+	document.addEventListener("keydown",keyDownHandler);
 	
 }
 
 function wallDetector(){
 	if(rightPressed){
-		document.removeEventListener("keypress",keyDownHandler);
+		document.removeEventListener("keydown",keyDownHandler);
 		if(characterX>=canvas.width-characterWidth){
 				rightPressed=false;
-				document.addEventListener("keypress",keyDownHandler);
+				document.addEventListener("keydown",keyDownHandler);
 			}
 		else if(characterX<canvas.width-characterWidth){
 			characterX+=5;
 			}
 	}
 	else if(leftPressed){
-		document.removeEventListener("keypress",keyDownHandler);
+		document.removeEventListener("keydown",keyDownHandler);
 		if(characterX<=0){
 			leftPressed=false;
-			document.addEventListener("keypress",keyDownHandler);
+			document.addEventListener("keydown",keyDownHandler);
 		}
 		else if(characterX>0){ 
 		characterX-=5;
 		}
 	}
 	else if(downPressed){
-		document.removeEventListener("keypress",keyDownHandler);
+		document.removeEventListener("keydown",keyDownHandler);
 		if(characterY>=canvas.height-characterHeight){
 				downPressed=false;
-				document.addEventListener("keypress",keyDownHandler);
+				document.addEventListener("keydown",keyDownHandler);
 			}
 		else if(characterY<canvas.height-characterHeight){
 			characterY+=5;
 			}
 	}
 	else if(upPressed){
-		document.removeEventListener("keypress",keyDownHandler);
+		document.removeEventListener("keydown",keyDownHandler);
 		if(characterY<=0){
 			upPressed=false;
-			document.addEventListener("keypress",keyDownHandler);
+			document.addEventListener("keydown",keyDownHandler);
 		}
 		else if(characterY>0){ 
 		characterY-=5;

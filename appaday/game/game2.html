@@ -32,6 +32,8 @@ var leftPressed=false;
 var downPressed=false;
 var upPressed=false;
 var resetPressed=false;
+var xMove=0;
+var yMove=0;
 
 
 
@@ -74,10 +76,12 @@ var board={
 			"cheeseY": 150,
 			"charX": 200,
 			"charY": 150,
-			"instructions":"If you get stuck you can press R to reset."
+			"instructions":"If you get stuck you can press R to reset the level."
 		}]
 }
 var pos = board.levels[lev];
+var posX=pos.charX+xMove;
+var posY=pos.charY+yMove;
 
 
 document.addEventListener("keydown",keyDownHandler,false);
@@ -100,8 +104,10 @@ function keyDownHandler(e){
 
 
 function drawCharacter(){
+	posX=pos.charX+xMove;
+	posY=pos.charY+yMove;
 	ctx.beginPath();
-	ctx.rect(pos.charX, pos.charY,characterWidth,characterHeight);
+	ctx.rect(posX, posY,characterWidth,characterHeight);
 	ctx.fillStyle="red";
 	ctx.fill();
 	ctx.closePath();
@@ -127,7 +133,9 @@ function drawCheese(){
 }
 
 function cheeseDetector(){
-	if(pos.charX==pos.cheeseX && pos.charY==pos.cheeseY){
+	var posX=pos.charX+xMove;
+	var posY=pos.charY+yMove;
+	if(posX==pos.cheeseX && posY==pos.cheeseY){
 		alert("Congrats, next level.");
 		//document.location.reload();
 		lev++;
@@ -136,27 +144,28 @@ function cheeseDetector(){
 		downPressed=false;
 		upPressed=false;
 		pos=board.levels[lev];
-
+		xMove=0;
+		yMove=0;
 	}
 }
 
 function characterMove(){
-	var xMove=0;
-	var	yMove=0;
+	var newXMove=0;
+	var	newYMove=0;
 	if(rightPressed){
-			xMove=5;
+			newXMove=5;
 		}
 		else if (leftPressed){
-			xMove=-5;
+			newXMove=-5;
 		}
 		else if(downPressed){
-			yMove=5;
+			newYMove=5;
 		}
 		else if(upPressed){
-			yMove=-5;
+			newYMove=-5;
 		}
-	var newX = pos.charX + xMove;
-	var newY = pos.charY + yMove;
+	var newX = posX + newXMove;
+	var newY = posY + newYMove;
 	boardDetector(newX,newY);
 	wallDetector();
 }
@@ -169,43 +178,42 @@ function boardDetector(x,y){
 					upPressed=false;
 					downPressed=false;
 				}
-	}
-	
+	}	
 }
 
 
 
 function wallDetector(){
 	if(rightPressed){
-		if(pos.charX>=canvas.width-characterWidth){
+		if(posX>=canvas.width-characterWidth){
 				rightPressed=false;
 			}
-		else if(pos.charX<canvas.width-characterWidth){
-			pos.charX+=5;
+		else if(posX<canvas.width-characterWidth){
+			xMove+=5;
 			}
 	}
 	else if(leftPressed){
-		if(pos.charX<=0){
+		if(posX<=0){
 			leftPressed=false;
 		}
-		else if(pos.charX>0){ 
-		pos.charX-=5;
+		else if(posX>0){ 
+		xMove-=5;
 		}
 	}
 	else if(downPressed){
-		if(pos.charY>=canvas.height-characterHeight){
+		if(posY>=canvas.height-characterHeight){
 				downPressed=false;
 			}
-		else if(pos.charY<canvas.height-characterHeight){
-			pos.charY+=5;
+		else if(posY<canvas.height-characterHeight){
+			yMove+=5;
 			}
 	}
 	else if(upPressed){
-		if(pos.charY<=0){
+		if(posY<=0){
 			upPressed=false;
 		}
-		else if(pos.charY>0){ 
-		pos.charY-=5;
+		else if(posY>0){ 
+		yMove-=5;
 	}
 	}
 }
@@ -231,13 +239,11 @@ function drawInstructions(){
 
 function resetLevel(){
 	if(resetPressed){
-		var resetX=board.levels[lev].charX;
-		var resetY=board.levels[lev].charY;
-		pos.charX=resetX;
-		pos.charY=resetY;
+		xMove=0;
+		yMove=0;
 		//drawBoard();
 		resetPressed=false;
-		console.log(resetX);
+		console.log(posX);
 	}
 }
 function draw(){

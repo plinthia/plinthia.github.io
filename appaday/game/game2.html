@@ -3,17 +3,23 @@
 <title> Mouse Game</title>
 <style>
 canvas {background: #eee; display: block; margin:0 auto;}
+body{
+	background-color:#666699;
+	text-align:center;
+	font-family: "helvetica";
+	color:#00ccff;
+}
 </style>
 </head>
 <body>
+<div id="instructions"></div>
 <canvas id="myCanvas" width="500" height="350"></canvas>
 <div id="test"></div>
 
 <script>
 var canvas=document.getElementById("myCanvas");
 ctx=canvas.getContext("2d");
-var characterX=0;
-var characterY=0;
+
 var characterHeight=50;
 var characterWidth=50;
 var cheeseHeight=50;
@@ -25,38 +31,46 @@ var rightPressed=false;
 var leftPressed=false;
 var downPressed=false;
 var upPressed=false;
+var resetPressed=false;
 
 
 
 var board={
 	"levels":[{
 			"level":1,
-			"boardX":[100,50,450],
-			"boardY":[0,300,300],
+			"boardX":[],
+			"boardY":[],
 			"cheeseX":450,
-			"cheeseY":100
+			"cheeseY":100,
+			"charX":0,
+			"charY":0,
+			"instructions":"You are a little red mouse, who wants to get the cheese. Use your cursor keys to navigate to the cheese."
 		},
 		{
 			"level":2,
-			"boardX":[50,200],
-			"boardY":[300,200],
+			"boardX":[100,50,0],
+			"boardY":[0,200,250],
 			"cheeseX":450,
-			"cheeseY":200
+			"cheeseY":200,
+			"charX":0,
+			"charY":0,
+			"instructions":"Good job! If your mouse hits an obstacle he will stop! Navigate around the obstacles to get the cheese!"
 		},
 		{
 			"level":3,
-			"boardX":[100,100],
-			"boardY":[100,450],
-			"cheeseX":300,
-			"cheeseY":0
+			"boardX":[400,350,50,100],
+			"boardY":[0,200,150,50],
+			"cheeseX":200,
+			"cheeseY":100,
+			"charX":0,
+			"charY":0
 		}]
 }
-
-//var boardX=[50, 50, 450];
-//var boardY=[0, 300, 300];
+var pos = board.levels[lev];
+//var characterX=pos.charX;
+//var characterY=pos.charY;
 
 document.addEventListener("keydown",keyDownHandler,false);
-//document.addEventListener("keyup",keyUpHandler,false);
 
 function keyDownHandler(e){
 	if(! (rightPressed || leftPressed || downPressed || upPressed)){
@@ -68,13 +82,16 @@ function keyDownHandler(e){
 			upPressed=true;
 		}else if(e.keyCode==40){
 			downPressed=true;
-		}}
+		}else if(e.keyCode==13){
+			resetPressed==true;
+		}
+	}
 }
 
 
 function drawCharacter(){
 	ctx.beginPath();
-	ctx.rect(characterX,characterY,characterWidth,characterHeight);
+	ctx.rect(pos.charX,pos.charY,characterWidth,characterHeight);
 	ctx.fillStyle="red";
 	ctx.fill();
 	ctx.closePath();
@@ -82,9 +99,9 @@ function drawCharacter(){
 
 
 function drawBoard(){
-	for(i=0; i<board.levels[lev].boardX.length; i++){
+	for(i=0; i<pos.boardX.length; i++){
 		ctx.beginPath();
-		ctx.rect(board.levels[lev].boardX[i], board.levels[lev].boardY[i], boardWidth, boardHeight);
+		ctx.rect(pos.boardX[i], pos.boardY[i], boardWidth, boardHeight);
 		ctx.fillStyle="black";
 		ctx.fill();
 		ctx.closePath();
@@ -93,23 +110,22 @@ function drawBoard(){
 
 function drawCheese(){
 	ctx.beginPath();
-	ctx.rect(board.levels[lev].cheeseX,board.levels[lev].cheeseY,cheeseWidth,cheeseHeight);
+	ctx.rect(pos.cheeseX, pos.cheeseY,cheeseWidth,cheeseHeight);
 	ctx.fillStyle="yellow";
 	ctx.fill();
 	ctx.closePath();
 }
 
 function cheeseDetector(){
-	if(characterX==board.levels[lev].cheeseX && characterY==board.levels[lev].cheeseY){
+	if(pos.charX==pos.cheeseX && pos.charY==pos.cheeseY){
 		alert("Congrats, next level.");
 		//document.location.reload();
 		lev++;
-		characterX=0;
-		characterY=0;
 		rightPressed=false;
 		leftPressed=false;
 		downPressed=false;
 		upPressed=false;
+		pos=board.levels[lev];
 
 	}
 }
@@ -129,24 +145,19 @@ function characterMove(){
 		else if(upPressed){
 			yMove=-5;
 		}
-	var newX = characterX + xMove;
-	var newY = characterY + yMove;
+	var newX = pos.charX + xMove;
+	var newY = pos.charY + yMove;
 	boardDetector(newX,newY);
 	wallDetector();
-
 }
 
 function boardDetector(x,y){
-	for(j=0; j<board.levels[lev].boardX.length; j++){
-		if(x + characterWidth > board.levels[lev].boardX[j] && x<board.levels[lev].boardX[j] + boardWidth && y +characterHeight > board.levels[lev].boardY[j] && y< board.levels[lev].boardY[j] + boardHeight){
+	for(j=0; j<pos.boardX.length; j++){
+		if(x + characterWidth > pos.boardX[j] && x<pos.boardX[j] + boardWidth && y +characterHeight > pos.boardY[j] && y< pos.boardY[j] + boardHeight){
 					rightPressed=false;
 					leftPressed=false;
 					upPressed=false;
 					downPressed=false;
-					document.getElementById("test").innerHTML="hit";
-		
-				}else{
-					document.getElementById("test").innerHTML="miss";
 				}
 	}
 	
@@ -156,56 +167,76 @@ function boardDetector(x,y){
 
 function wallDetector(){
 	if(rightPressed){
-		if(characterX>=canvas.width-characterWidth){
+		if(pos.charX>=canvas.width-characterWidth){
 				rightPressed=false;
 			}
-		else if(characterX<canvas.width-characterWidth){
-			characterX+=5;
+		else if(pos.charX<canvas.width-characterWidth){
+			pos.charX+=5;
 			}
 	}
 	else if(leftPressed){
-		if(characterX<=0){
+		if(pos.charX<=0){
 			leftPressed=false;
 		}
-		else if(characterX>0){ 
-		characterX-=5;
+		else if(pos.charX>0){ 
+		pos.charX-=5;
 		}
 	}
 	else if(downPressed){
-		if(characterY>=canvas.height-characterHeight){
+		if(pos.charY>=canvas.height-characterHeight){
 				downPressed=false;
 			}
-		else if(characterY<canvas.height-characterHeight){
-			characterY+=5;
+		else if(pos.charY<canvas.height-characterHeight){
+			pos.charY+=5;
 			}
 	}
 	else if(upPressed){
-		if(characterY<=0){
+		if(pos.charY<=0){
 			upPressed=false;
 		}
-		else if(characterY>0){ 
-		characterY-=5;
+		else if(pos.charY>0){ 
+		pos.charY-=5;
 	}
 	}
 }
 
 function endDetector(){
 	if(lev==board.levels.length){
-		alert("You are out of levels./nPress OK to start again.");
+		alert("You are out of levels. Press OK to start again.");
 		document.location.reload();
 	}
 }
 
+function drawLevel(){
+	document.getElementById("test").innerHTML="Level: " + pos.level;
+}
+
+function drawInstructions(){
+	if(pos.instructions){
+		document.getElementById("instructions").innerHTML=pos.instructions;
+	}else{
+		document.getElementById("instructions").innerHTML=" "
+	}
+}
+
+function resetLevel(){
+	if(resetPressed){
+		//drawBoard();
+		resetPressed=false;
+console.log("reset");
+	}
+}
 function draw(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	characterMove();
-	endDetector();
-	//boardDetector();
 	drawCharacter();
 	drawCheese();
 	drawBoard();
 	cheeseDetector();
-	//wallDetector();
+	endDetector();
+	drawLevel();
+	drawInstructions();
+	resetLevel();
 
 }
 

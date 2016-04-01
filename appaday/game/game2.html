@@ -65,6 +65,16 @@ var board={
 			"charX":0,
 			"charY":0,
 			"instructions":"You can use the obstacles to help position your mouse to help get the cheese."
+		},
+		{
+			"level":4,
+			"boardX":[250,200,350],
+			"boardY":[150,50,100],
+			"cheeseX": 300,
+			"cheeseY": 150,
+			"charX": 200,
+			"charY": 150,
+			"instructions":"If you get stuck you can press R to reset."
 		}]
 }
 var pos = board.levels[lev];
@@ -73,7 +83,7 @@ var pos = board.levels[lev];
 document.addEventListener("keydown",keyDownHandler,false);
 
 function keyDownHandler(e){
-	if(! (rightPressed || leftPressed || downPressed || upPressed)){
+	if(! (rightPressed || leftPressed || downPressed || upPressed || resetPressed)){
 		if(e.keyCode==39){
 			rightPressed=true;
 		}else if(e.keyCode==37){
@@ -82,8 +92,8 @@ function keyDownHandler(e){
 			upPressed=true;
 		}else if(e.keyCode==40){
 			downPressed=true;
-		}else if(e.keyCode==13){
-			resetPressed==true;
+		}else if(e.keyCode==82){
+			resetPressed=true;
 		}
 	}
 }
@@ -91,7 +101,7 @@ function keyDownHandler(e){
 
 function drawCharacter(){
 	ctx.beginPath();
-	ctx.rect(pos.charX,pos.charY,characterWidth,characterHeight);
+	ctx.rect(pos.charX, pos.charY,characterWidth,characterHeight);
 	ctx.fillStyle="red";
 	ctx.fill();
 	ctx.closePath();
@@ -221,9 +231,13 @@ function drawInstructions(){
 
 function resetLevel(){
 	if(resetPressed){
+		var resetX=board.levels[lev].charX;
+		var resetY=board.levels[lev].charY;
+		pos.charX=resetX;
+		pos.charY=resetY;
 		//drawBoard();
 		resetPressed=false;
-console.log("reset");
+		console.log(resetX);
 	}
 }
 function draw(){

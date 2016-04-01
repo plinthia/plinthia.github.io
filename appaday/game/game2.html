@@ -110,9 +110,25 @@ function cheeseDetector(){
 
 function boardDetector(){
 	for(j=0; j<board.levels[lev].boardX.length; j++){
+		var xMove=0;
+		var yMove=0;
+		if(rightPressed){
+			xMove=5;
+		}
+		else if (leftPressed){
+			xMove=-5;
+		}
+		else if(downPressed){
+			yMove=5;
+		}
+		else if(upPressed){
+			yMove=-5;
+		}
+		var newX = characterX + xMove;
+		var newY = characterY + yMove;
 		if(rightPressed || leftPressed){
 		
-				if(characterX + characterWidth >= board.levels[lev].boardX[j] && characterX<=board.levels[lev].boardX[j] + boardWidth && characterY +characterHeight > board.levels[lev].boardY[j] && characterY< board.levels[lev].boardY[j] + boardHeight){
+				if(newX + characterWidth >= board.levels[lev].boardX[j] && newX<=board.levels[lev].boardX[j] + boardWidth && newY +characterHeight > board.levels[lev].boardY[j] && newY< board.levels[lev].boardY[j] + boardHeight){
 					rightPressed=false;
 					leftPressed=false;
 					upPressed=false;
@@ -124,7 +140,7 @@ function boardDetector(){
 				}
 			}
 			else if(downPressed || upPressed){
-			if(characterX + characterWidth > board.levels[lev].boardX[j] && characterX<board.levels[lev].boardX[j] + boardWidth && characterY +characterHeight >= board.levels[lev].boardY[j] && characterY<= board.levels[lev].boardY[j] + boardHeight){
+			if(newX + characterWidth > board.levels[lev].boardX[j] && newX<board.levels[lev].boardX[j] + boardWidth && newY +characterHeight >= board.levels[lev].boardY[j] && newY<= board.levels[lev].boardY[j] + boardHeight){
 					rightPressed=false;
 					leftPressed=false;
 					upPressed=false;
@@ -185,12 +201,12 @@ function endDetector(){
 function draw(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	endDetector();
+	boardDetector();
 	drawCharacter();
 	drawCheese();
 	drawBoard();
 	cheeseDetector();
 	wallDetector();
-	boardDetector();
 
 }
 
